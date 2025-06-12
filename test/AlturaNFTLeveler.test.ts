@@ -181,15 +181,17 @@ describe("AlturaNFTLeveler (upgradeable) — using TestToken + MyToken", functio
         .connect(userA)
         .approve(await lv2.getAddress(), HIGH_COST - 1n);
 
-      await expect(lv2.connect(authorized).levelUp(userA.address, TOKEN_ID, 1)).to
-        .be.reverted;
+      await expect(lv2.connect(authorized).levelUp(userA.address, TOKEN_ID, 1))
+        .to.be.reverted;
     });
 
     it("allows authorized to levelUp, charges fee, and increments level", async function () {
       const balBefore = await token.balanceOf(userA.address);
       expect(await leveler.getLevel(TOKEN_ID)).to.equal(0);
 
-      await expect(leveler.connect(authorized).levelUp(userA.address, TOKEN_ID, 1))
+      await expect(
+        leveler.connect(authorized).levelUp(userA.address, TOKEN_ID, 1)
+      )
         .to.emit(leveler, "LeveledUp")
         .withArgs(userA.address, TOKEN_ID, 1);
 
@@ -225,7 +227,9 @@ describe("AlturaNFTLeveler (upgradeable) — using TestToken + MyToken", functio
       expect(await leveler.getBaseCost()).to.equal(0);
 
       const balBefore = await token.balanceOf(userA.address);
-      await expect(leveler.connect(authorized).levelUp(userA.address, TOKEN_ID, 1))
+      await expect(
+        leveler.connect(authorized).levelUp(userA.address, TOKEN_ID, 1)
+      )
         .to.emit(leveler, "LeveledUp")
         .withArgs(userA.address, TOKEN_ID, 1);
 
@@ -245,7 +249,9 @@ describe("AlturaNFTLeveler (upgradeable) — using TestToken + MyToken", functio
       expect(await leveler.authorized()).to.equal(authorized.address);
 
       // Old authorized does first levelUp (cost = 1×base)
-      await expect(leveler.connect(authorized).levelUp(userA.address, TOKEN_ID, 1))
+      await expect(
+        leveler.connect(authorized).levelUp(userA.address, TOKEN_ID, 1)
+      )
         .to.emit(leveler, "LeveledUp")
         .withArgs(userA.address, TOKEN_ID, 1);
 
@@ -289,7 +295,9 @@ describe("AlturaNFTLeveler (upgradeable) — using TestToken + MyToken", functio
       await token
         .connect(userB)
         .approve(await leveler.getAddress(), INITIAL_COST);
-      await expect(leveler.connect(authorized).levelUp(userB.address, TOKEN_ID, 1))
+      await expect(
+        leveler.connect(authorized).levelUp(userB.address, TOKEN_ID, 1)
+      )
         .to.emit(leveler, "LeveledUp")
         .withArgs(userB.address, TOKEN_ID, 1);
     });
@@ -300,11 +308,14 @@ describe("AlturaNFTLeveler (upgradeable) — using TestToken + MyToken", functio
         .connect(userA)
         .approve(await leveler.getAddress(), INITIAL_COST);
 
-      await expect(leveler.connect(authorized).levelUp(userA.address, TOKEN_ID, 1))
-        .to.be.reverted; // Paused → transferFrom fails
+      await expect(
+        leveler.connect(authorized).levelUp(userA.address, TOKEN_ID, 1)
+      ).to.be.reverted; // Paused → transferFrom fails
 
       await token.connect(owner).unpause();
-      await expect(leveler.connect(authorized).levelUp(userA.address, TOKEN_ID, 1))
+      await expect(
+        leveler.connect(authorized).levelUp(userA.address, TOKEN_ID, 1)
+      )
         .to.emit(leveler, "LeveledUp")
         .withArgs(userA.address, TOKEN_ID, 1);
     });
@@ -373,12 +384,16 @@ describe("AlturaNFTLeveler (upgradeable) — using TestToken + MyToken", functio
       await token.connect(userB).approve(await leveler.getAddress(), total);
 
       // userA does first levelUp (1→1)
-      await expect(leveler.connect(authorized).levelUp(userA.address, TOKEN_ID, 1))
+      await expect(
+        leveler.connect(authorized).levelUp(userA.address, TOKEN_ID, 1)
+      )
         .to.emit(leveler, "LeveledUp")
         .withArgs(userA.address, TOKEN_ID, 1);
 
       // userB does second levelUp (1→2)
-      await expect(leveler.connect(authorized).levelUp(userB.address, TOKEN_ID, 1))
+      await expect(
+        leveler.connect(authorized).levelUp(userB.address, TOKEN_ID, 1)
+      )
         .to.emit(leveler, "LeveledUp")
         .withArgs(userB.address, TOKEN_ID, 2);
 
@@ -487,8 +502,12 @@ describe("AlturaNFTLeveler (upgradeable) — using TestToken + MyToken", functio
 
     it("allows the owner to raise maxLevel and resumes leveling", async () => {
       // hit the cap…
-      await v3.connect(authorized).levelUp(await userA.getAddress(), TOKEN_ID, 1);
-      await v3.connect(authorized).levelUp(await userA.getAddress(), TOKEN_ID, 1);
+      await v3
+        .connect(authorized)
+        .levelUp(await userA.getAddress(), TOKEN_ID, 1);
+      await v3
+        .connect(authorized)
+        .levelUp(await userA.getAddress(), TOKEN_ID, 1);
       await expect(
         v3.connect(authorized).levelUp(await userA.getAddress(), TOKEN_ID, 1)
       ).to.be.revertedWith("Already at maximum level");
@@ -511,6 +530,69 @@ describe("AlturaNFTLeveler (upgradeable) — using TestToken + MyToken", functio
       await expect(v3.connect(userA).setMaxLevel(10))
         .to.be.revertedWithCustomError(v3, "OwnableUnauthorizedAccount")
         .withArgs(userA.address);
+    });
+  });
+  describe("Rarity × Level combinations", function () {
+    const MAX_TEST_LEVEL = 3;
+    const rarities = [1, 2, 3];
+
+    rarities.forEach((rarity) => {
+      describe(`rarity=${rarity}`, function () {
+        for (
+          let targetLevel = 1;
+          targetLevel <= MAX_TEST_LEVEL;
+          targetLevel++
+        ) {
+          it(`levels up to ${targetLevel} and charges correct fee`, async function () {
+            // Deploy a fresh Leveler proxy
+            const LevelerFactory = await ethers.getContractFactory(
+              "AlturaNFTLevelerV2"
+            );
+            const isolated = (await upgrades.deployProxy(
+              LevelerFactory,
+              [
+                await nft.getAddress(),
+                await token.getAddress(),
+                INITIAL_COST,
+                await authorized.getAddress(),
+              ],
+              { initializer: "initialize" }
+            )) as AlturaNFTLevelerV2;
+
+            // Top up userA and approve
+            await token
+              .connect(owner)
+              .mint(userA.address, parseUnits("1000.0", 18));
+            await token
+              .connect(userA)
+              .approve(await isolated.getAddress(), parseUnits("1000.0", 18));
+
+            // Record the actual starting balance
+            const startingBal = await token.balanceOf(userA.address);
+
+            let cumulativePaid = 0n;
+            // Level up from 1 → targetLevel
+            for (let lvl = 1; lvl <= targetLevel; lvl++) {
+              const expectedCost = INITIAL_COST * BigInt(lvl) * BigInt(rarity);
+              cumulativePaid += expectedCost;
+
+              await expect(
+                isolated
+                  .connect(authorized)
+                  .levelUp(userA.address, TOKEN_ID, rarity)
+              )
+                .to.emit(isolated, "LeveledUp")
+                .withArgs(userA.address, TOKEN_ID, lvl);
+
+              expect(await isolated.getLevel(TOKEN_ID)).to.equal(lvl);
+            }
+
+            // Check total ERC-20 taken matches the sum of all fees
+            const finalBal = await token.balanceOf(userA.address);
+            expect(finalBal).to.equal(startingBal - cumulativePaid);
+          });
+        }
+      });
     });
   });
 });
