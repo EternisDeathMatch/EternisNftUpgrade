@@ -1,0 +1,413 @@
+{
+  "manifestVersion": "3.2",
+  "proxies": [
+    {
+      "address": "0x2312B28684a1819614f6201349a6654ea1960b94",
+      "txHash": "0x552c52617f0fb9b02ac96ff2994df7c633cc5001123610c04adaf1559020880c",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "72c09c41b7e97cd755419f15397c84c0d90043c775b200d7fe17da9d4712a165": {
+      "address": "0x7E8208FB014b5d4865264197EBF17eF600beF098",
+      "txHash": "0x1c77bd1b6d637653c867068f07fcde15d13af24f33bb519ca852c027478980f7",
+      "layout": {
+        "solcVersion": "0.8.24",
+        "storage": [
+          {
+            "label": "altura",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "AlturaNFTLevelerV2",
+            "src": "contracts\\AlturaNFTLeveler.sol:22"
+          },
+          {
+            "label": "paymentToken",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "AlturaNFTLevelerV2",
+            "src": "contracts\\AlturaNFTLeveler.sol:25"
+          },
+          {
+            "label": "upgradeCost",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_uint256",
+            "contract": "AlturaNFTLevelerV2",
+            "src": "contracts\\AlturaNFTLeveler.sol:28"
+          },
+          {
+            "label": "authorized",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_address",
+            "contract": "AlturaNFTLevelerV2",
+            "src": "contracts\\AlturaNFTLeveler.sol:31"
+          },
+          {
+            "label": "levelOf",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "AlturaNFTLevelerV2",
+            "src": "contracts\\AlturaNFTLeveler.sol:34"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)73_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)13_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "4c002456ad5517c8238bbf99655667fc13a3e8cbfb55d3a3b27dc4eef7e68d14": {
+      "address": "0x99AF40c97d477e079C4876fCDFf9089D0c95247E",
+      "txHash": "0xbdbeb5b1776bbe73e4855aa4df8297b6a8a5fb4e1e4c868035bea79d0940f40d",
+      "layout": {
+        "solcVersion": "0.8.24",
+        "storage": [
+          {
+            "label": "altura",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "AlturaNFTLevelerV2",
+            "src": "contracts\\AlturaNFTLeveler.sol:22"
+          },
+          {
+            "label": "paymentToken",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "AlturaNFTLevelerV2",
+            "src": "contracts\\AlturaNFTLeveler.sol:25"
+          },
+          {
+            "label": "upgradeCost",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_uint256",
+            "contract": "AlturaNFTLevelerV2",
+            "src": "contracts\\AlturaNFTLeveler.sol:28"
+          },
+          {
+            "label": "authorized",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_address",
+            "contract": "AlturaNFTLevelerV2",
+            "src": "contracts\\AlturaNFTLeveler.sol:31"
+          },
+          {
+            "label": "levelOf",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "AlturaNFTLevelerV2",
+            "src": "contracts\\AlturaNFTLeveler.sol:34"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)73_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)13_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "96468d149e7f9c55fcbfdfc272356cc3937ed0ab4eac93a2086510888971c281": {
+      "address": "0x73c3ae0FAC395f807cec05B0a4E9585285D261f6",
+      "txHash": "0x033bf037a9b293c5b95dc4f98c87f2ad27d7e4840592ef06891bcca7b8741711",
+      "layout": {
+        "solcVersion": "0.8.24",
+        "storage": [
+          {
+            "label": "altura",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "AlturaNFTLevelerV2",
+            "src": "contracts\\AlturaNFTLeveler.sol:22"
+          },
+          {
+            "label": "paymentToken",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "AlturaNFTLevelerV2",
+            "src": "contracts\\AlturaNFTLeveler.sol:25"
+          },
+          {
+            "label": "upgradeCost",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_uint256",
+            "contract": "AlturaNFTLevelerV2",
+            "src": "contracts\\AlturaNFTLeveler.sol:28"
+          },
+          {
+            "label": "authorized",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_address",
+            "contract": "AlturaNFTLevelerV2",
+            "src": "contracts\\AlturaNFTLeveler.sol:31"
+          },
+          {
+            "label": "levelOf",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "AlturaNFTLevelerV2",
+            "src": "contracts\\AlturaNFTLeveler.sol:34"
+          },
+          {
+            "label": "maxLevel",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_uint256",
+            "contract": "AlturaNFTLevelerV3",
+            "src": "contracts\\AlturaNFTLeveler.sol:145"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)73_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)13_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
