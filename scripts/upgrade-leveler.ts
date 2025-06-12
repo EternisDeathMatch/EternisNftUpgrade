@@ -19,7 +19,9 @@ async function main() {
 
   // 4) Upgrade the proxy to V3
   console.log("⏳ Upgrading proxy to V3…");
-  const upgraded = await upgrades.upgradeProxy(PROXY_ADDRESS, LevelerV3Factory);
+  const upgraded = await upgrades.upgradeProxy(PROXY_ADDRESS, LevelerV3Factory, {
+    unsafeAllowRenames: true
+  });
   await upgraded.deploymentTransaction()?.wait();
   console.log("✅ Proxy remains at:", await upgraded.getAddress());
 
