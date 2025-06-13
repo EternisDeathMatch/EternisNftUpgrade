@@ -32,6 +32,19 @@ async function main() {
 
   console.log("AlturaNFTLeveler (proxy) deployed at:", await levelerProxy.getAddress());
 
+  // Deploy the messenger linked to this leveler
+  const ENDPOINT = process.env.LZ_ENDPOINT;
+  if (!ENDPOINT) throw new Error("LZ_ENDPOINT env var not set");
+  const Messenger = await ethers.getContractFactory("LevelerMessenger");
+  const messenger = await Messenger.deploy(ENDPOINT, await levelerProxy.getAddress());
+  await messenger.waitForDeployment();
+  console.log("LevelerMessenger deployed at:", await messenger.getAddress());
+
+  // Grant messenger authorization to call levelUp
+  const authTx = await levelerProxy.setAuthorized(await messenger.getAddress());
+  await authTx.wait();
+  console.log("Messenger authorized on leveler");
+
   // 7) (Optional) Output the implementation address for record‐keeping:
   const impl = await upgrades.erc1967.getImplementationAddress(await levelerProxy.getAddress());
   console.log("Implementation address:", impl);

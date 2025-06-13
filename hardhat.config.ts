@@ -3,6 +3,7 @@ import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-contract-sizer";
 import "@nomicfoundation/hardhat-toolbox";
 import "@openzeppelin/hardhat-upgrades";
+import "@layerzerolabs/hardhat-verify";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -40,6 +41,13 @@ const config: HardhatUserConfig = {
         process.env.AMOY_USERA_PRIVATE_KEY!,
         process.env.AMOY_USERB_PRIVATE_KEY!
       ].filter((x) => x !== undefined),
+      gas: "auto",
+      gasPrice: "auto",
+    },
+    xdcTestnet: {
+      url: process.env.XDC_RPC_URL || "",
+      chainId: 51,
+      accounts: [process.env.XDC_DEPLOYER_PRIVATE_KEY!].filter((x) => x !== undefined),
       gas: "auto",
       gasPrice: "auto",
     },
