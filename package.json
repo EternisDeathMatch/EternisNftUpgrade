@@ -10,6 +10,7 @@
     "ts-node": "^10.9.2"
   },
   "dependencies": {
+    "@layerzerolabs/solidity-examples": "^1.1.0",
     "@openzeppelin/contracts": "^5.3.0",
     "ethers": "^6.13.2"
   }

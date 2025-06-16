@@ -1,7 +1,6 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-contract-sizer";
-import "@nomicfoundation/hardhat-toolbox";
 import "@openzeppelin/hardhat-upgrades";
 import * as dotenv from "dotenv";
 
@@ -19,8 +18,8 @@ const config: HardhatUserConfig = {
     },
   },
   contractSizer: {
-    runOnCompile: true, // Automatically prints contract sizes after each compile
-    alphaSort: true, // Sorts contracts alphabetically
+    runOnCompile: true,
+    alphaSort: true,
     disambiguatePaths: false,
   },
   networks: {
@@ -39,6 +38,31 @@ const config: HardhatUserConfig = {
         process.env.AMOY_DEPLOYER_PRIVATE_KEY!,
         process.env.AMOY_USERA_PRIVATE_KEY!,
         process.env.AMOY_USERB_PRIVATE_KEY!
+      ].filter((x) => x !== undefined),
+      gas: "auto",
+      gasPrice: "auto",
+    },
+    xdc: {
+      url: process.env.XDC_RPC_URL || "https://rpc.xinfin.network",
+      chainId: 50,
+      accounts: [
+        process.env.XDC_DEPLOYER_PRIVATE_KEY!
+      ].filter((x) => x !== undefined),
+      gas: "auto",
+      gasPrice: "auto",
+    },
+    polygon: {
+      url: process.env.POLYGON_RPC_URL || "https://polygon-rpc.com",
+      chainId: 137,
+      accounts: [process.env.POLYGON_DEPLOYER_PRIVATE_KEY!].filter((x) => x !== undefined),
+      gas: "auto",
+      gasPrice: "auto",
+    },
+     ethereum: {
+      url: process.env.ETHEREUM_RPC_URL || "https://eth.llamarpc.com",
+      chainId: 1,
+      accounts: [
+        process.env.ETHEREUM_DEPLOYER_PRIVATE_KEY!
       ].filter((x) => x !== undefined),
       gas: "auto",
       gasPrice: "auto",
