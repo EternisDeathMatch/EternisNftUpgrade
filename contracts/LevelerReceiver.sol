@@ -8,7 +8,7 @@ import "./AlturaNFTLevelerV4.sol";
 contract LevelerReceiver is NonblockingLzApp {
     AlturaNFTLevelerV4 public immutable leveler;
     event ReceivedAndLeveled(address indexed user, uint256 indexed tokenId);
-    event ReceivedCall();
+    event ReceivedCall(uint256 indexed id);
 
     /// @param _endpoint LayerZero endpoint on Polygon Amoy
     /// @param _leveler  Your deployed AlturaNFTLevelerV4 proxy address
@@ -28,7 +28,10 @@ contract LevelerReceiver is NonblockingLzApp {
         uint64, // nonce (ignored)
         bytes memory payload
     ) internal override {
-        emit ReceivedCall();
+        emit ReceivedCall(1);
+        emit ReceivedCall(2);
+        emit ReceivedCall(3);
+        emit ReceivedCall(4);
 
         // // Decode only the two values we actually need
         // (address user, uint256 tokenId) = abi.decode(
@@ -40,4 +43,24 @@ contract LevelerReceiver is NonblockingLzApp {
         // Now call the bridge-only entrypoint
         // leveler.levelUpFromBridge(user, tokenId);
     }
+
+    // function _blockingLzReceive(
+    //     uint16 _srcChainId,
+    //     bytes memory _srcAddress,
+    //     uint64 _nonce,
+    //     bytes memory _payload
+    // ) internal override {
+    //     super._blockingLzReceive(_srcChainId, _srcAddress, _nonce, _payload);
+    //     emit ReceivedCall();
+    //     emit ReceivedCall();
+    //     emit ReceivedCall();
+    //     emit ReceivedCall();
+    //     emit ReceivedCall();
+    //     emit ReceivedCall();
+    //     emit ReceivedCall();
+    //     emit ReceivedCall();
+
+    //     // Call the non-blocking receive function
+    //     _nonblockingLzReceive(_srcChainId, _srcAddress, _nonce, _payload);
+    // }
 }
