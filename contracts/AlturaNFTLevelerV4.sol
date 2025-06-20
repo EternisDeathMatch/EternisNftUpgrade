@@ -24,7 +24,6 @@ contract AlturaNFTLevelerV4 is AlturaNFTLevelerV3 {
         uint256 tokenId
     ) external {
         require(msg.sender == bridgeAgent, "caller not bridge");
-        require(levelOf[tokenId] < maxLevel, "at max");
 
         levelOf[tokenId] += 1;
         emit LeveledUp(user, tokenId, levelOf[tokenId]);

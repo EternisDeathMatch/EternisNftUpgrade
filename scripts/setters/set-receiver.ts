@@ -9,7 +9,7 @@ async function main() {
 
   const sender = await ethers.getContractAt("XdcLevelerSender", SENDER);
   const payload = ethers.solidityPacked(["address"], [RECEIVER]);
-  const tx = await sender.setReceiver(payload);
+  const tx = await sender.setRemoteReceiver(payload);
   await tx.wait();
   console.log("XDC sender now points to receiver", RECEIVER);
 }

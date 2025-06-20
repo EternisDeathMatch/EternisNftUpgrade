@@ -1,52 +1,57 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  // 1. Get deployer
   const [deployer] = await ethers.getSigners();
-  console.log("[DEBUG] Deployer address:", deployer.address);
+  console.log("[DEBUG] Deployer:", deployer.address);
 
-  // 2. Read LayerZero endpoint and token address from env
   const LZ_XDC = process.env.LAYERZERO_XDC_ENDPOINT!;
-  console.log("[DEBUG] LayerZero XDC endpoint:", LZ_XDC);
   const SENT = process.env.SENTINEL_TOKEN_ADDRESS!;
-  console.log("[DEBUG] SentinelToken address:", SENT);
+  const BASE = process.env.BASE_COST!; // e.g. "100"
+  const DST = process.env.INITIAL_DST_CHAIN!; // e.g. "1"
+  const MAX = process.env.INITIAL_MAX_LEVEL!; // e.g. "10"
+  const AUTH = process.env.INITIAL_AUTH!; // e.g. deployer.address
 
-  // 3. Encode placeholder for receiver (zero address)
+  // encode the receiver (bytes)
   const RECEIVER_PLACEHOLDER = ethers.AbiCoder.defaultAbiCoder().encode(
     ["address"],
     [ethers.ZeroAddress]
   );
-  console.log("[DEBUG] Encoded receiver placeholder:", RECEIVER_PLACEHOLDER);
 
-  // 4. Fetch contract factory
-  console.log("[DEBUG] Fetching XdcLevelerSender factory...");
+  // parse numeric envs
+  const baseCost = ethers.parseUnits(BASE, 18);
+  const initialDst = Number(DST);
+  const initialMax = Number(MAX);
+  const initialAuth = AUTH;
+
+  console.log("[DEBUG] Params:", {
+    LZ_XDC,
+    SENT,
+    baseCost,
+    initialDst,
+    initialMax,
+    initialAuth,
+  });
+
+  // fetch factory & deploy
   const Sender = await ethers.getContractFactory("XdcLevelerSender");
-  console.log("[DEBUG] Factory fetched successfully.");
-
-  // 5. Deploy contract
-  console.log("[DEBUG] Deploying XdcLevelerSender...");
   const sender = await Sender.deploy(
     LZ_XDC,
     SENT,
-    RECEIVER_PLACEHOLDER
+    RECEIVER_PLACEHOLDER,
+    baseCost,
+    initialDst,
+    initialMax,
+    initialAuth
   );
-//   console.log("[DEBUG] Deployment tx hash:", await (await sender.waitForDeployment()).getAddress());
-
-  // 6. Wait for deployment to complete
   await sender.waitForDeployment();
-  console.log("[DEBUG] Deployment confirmed at address:", await sender.getAddress());
-  //0x68636Bf774e8C5b7fD51C977Cd530c10b080005a
 
-  // 7. Optional: verify on-chain parameters
-  try {
-    const chainId = await deployer.provider?.getNetwork().then((network) => network.chainId);
-    console.log("[DEBUG] Deployed on chainId:", chainId);
-  } catch (e) {
-    console.warn("[DEBUG] Could not fetch chainId:", e);
-  }
+  console.log(
+    "[DEBUG] XdcLevelerSender deployed at",
+    await sender.getAddress()
+  );
 }
 
 main().catch((e) => {
-  console.error("[ERROR] deploy-sender.js failed:", e);
+  console.error(e);
   process.exit(1);
 });

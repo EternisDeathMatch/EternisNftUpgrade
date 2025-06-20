@@ -1,79 +1,67 @@
 import { ethers, upgrades } from "hardhat";
 
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function main() {
-  // Initial debug
-  console.log("[DEBUG] Starting deploy-leveler script...");
-
   const [deployer] = await ethers.getSigners();
-  console.log("[DEBUG] Deployer address:", deployer.address);
-
   const ALTURA_NFT = process.env.ALTURA_NFT_ADDRESS!;
-  console.log("[DEBUG] ALTURA_NFT address from env:", ALTURA_NFT);
 
-  // --- Deploy V2 ---
-  console.log("[DEBUG] Deploying V2 proxy...");
+  // 1) deploy V2 proxy
   const V2 = await ethers.getContractFactory("AlturaNFTLevelerV2");
-  console.log("[DEBUG] Got V2 factory: AlturaNFTLevelerV2");
   const levelerV2 = await upgrades.deployProxy(
     V2,
     [ALTURA_NFT, ethers.ZeroAddress, 1, deployer.address],
     { initializer: "initialize" }
   );
-  // console.log("[DEBUG] V2 deploy transaction hash:", levelerV2.deploymentTransaction());
   await levelerV2.waitForDeployment();
-  console.log("[DEBUG] V2 Proxy deployed at", await levelerV2.getAddress());
 
-  // --- Upgrade to V3 ---
-  console.log("[DEBUG] Upgrading proxy to V3...");
+  const proxyAddress = await levelerV2.getAddress();
+  console.log("🔹 Proxy address:", proxyAddress);
+
+  // give a moment before reading impl
+  await delay(5000);
+  const implV2 = await upgrades.erc1967.getImplementationAddress(proxyAddress);
+  console.log("🔹 V2 Implementation address:", implV2);
+
+  // 2) upgrade to V3 *and* run initializeV3
   const V3 = await ethers.getContractFactory("AlturaNFTLevelerV3");
-  console.log("[DEBUG] Got V3 factory: AlturaNFTLevelerV3");
-  const levelerV3 = await upgrades.upgradeProxy(
-    await levelerV2.getAddress(),
-    V3
-  );
-  // console.log("[DEBUG] V3 upgrade transaction hash:", (levelerV3.deployTransaction)?.hash);
+  const levelerV3 = await upgrades.upgradeProxy(proxyAddress, V3, {
+    call: { fn: "initializeV3", args: [3] },
+  });
   await levelerV3.waitForDeployment();
-  console.log("[DEBUG] Proxy upgraded to V3 at", await levelerV3.getAddress());
 
-  console.log(
-    "[DEBUG] Calling initializeV3 with maxLevel=10 on V3 proxy at",
-    await levelerV3.getAddress()
-  );
-  let init3;
-  try {
-    const tx3 = await levelerV3.initializeV3(3);
-    console.log("[DEBUG] initializeV3 tx hash:", tx3.hash);
-    init3 = await tx3.wait();
-    console.log("[DEBUG] initializeV3 mined in block", init3?.blockNumber);
-  } catch (err: any) {
-    console.error("[ERROR] initializeV3 reverted:", err.message || err);
-    throw err;
-  }
-  console.log("[DEBUG] Upgrading proxy to V4...");
+  // pause before fetching V3 impl
+  console.log("⏳ Waiting 5s before reading V3 implementation…");
+  await delay(5000);
+  const implV3 = await upgrades.erc1967.getImplementationAddress(proxyAddress);
+  console.log("🔹 V3 Implementation address:", implV3);
+
+  // 3) upgrade to V4 *and* run initializeV4
   const V4 = await ethers.getContractFactory("AlturaNFTLevelerV4");
-  console.log("[DEBUG] Got V4 factory: AlturaNFTLevelerV4");
-  const levelerV4 = await upgrades.upgradeProxy(
-    await levelerV2.getAddress(),
-    V4
-  );
-  console.log(
-    "[DEBUG] V4 upgrade transaction hash:",
-    levelerV4.deploymentTransaction()?.hash
-  );
+  const levelerV4 = await upgrades.upgradeProxy(proxyAddress, V4, {
+    call: { fn: "initializeV4", args: [ethers.ZeroAddress] },
+  });
   await levelerV4.waitForDeployment();
-  console.log("[DEBUG] Proxy upgraded to V4 at", await levelerV4.getAddress());
 
-  // Initialize V4
-  console.log("[DEBUG] Initializing V4 bridgeAgent...");
-  const tx4 = await levelerV4.initializeV4(ethers.ZeroAddress);
-  console.log("[DEBUG] initializeV4 transaction hash:", tx4.hash);
-  const init4 = await tx4.wait();
-  console.log("[DEBUG] initializeV4 mined in block", init4?.blockNumber);
+  // final pause before reading V4 impl
+  console.log("⏳ Waiting 5s before reading V4 implementation…");
+  await delay(5000);
+  const implV4 = await upgrades.erc1967.getImplementationAddress(proxyAddress);
+  console.log("🔹 V4 Implementation address:", implV4);
 
-  console.log("[DEBUG] deploy-leveler script completed successfully.");
+  console.log("✅ Fully upgraded to V4 at proxy:", proxyAddress);
 }
 
 main().catch((e) => {
-  console.error("[ERROR] deploy-leveler.ts failed:", e);
+  console.error(e);
   process.exit(1);
 });
+// 🔹 Proxy address: 0x7d4Bfb6cC51AF9D9e4cadA539aC3EEd7e0638312
+// 🔹 V2 Implementation address: 0x40dD81435115e73D9d8C5AB128DABF400C1BdAA4
+// ⏳ Waiting 5s before reading V3 implementation…
+// 🔹 V3 Implementation address: 0xDaAc7e908dDf05E452475D4949e93806036C5394
+// ⏳ Waiting 5s before reading V4 implementation…
+// 🔹 V4 Implementation address: 0x9420b11fe9Bc3D68EbBD5c1b5A862dce83f299F9
+// ✅ Fully upgraded to V4 at proxy: 0x7d4Bfb6cC51AF9D9e4cadA539aC3EEd7e0638312

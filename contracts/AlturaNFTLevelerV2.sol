@@ -10,7 +10,7 @@ interface IAlturaNFTV3 {
 }
 
 contract AlturaNFTLevelerV2 is Initializable, OwnableUpgradeable {
-    address public altura;
+    address public collectionAddress;
     address public paymentToken;
     uint256 private _baseCost;
     address public authorized;
@@ -25,18 +25,20 @@ contract AlturaNFTLevelerV2 is Initializable, OwnableUpgradeable {
         _;
     }
 
+
+
     function initialize(
-        address _alturaAddress,
+        address _collectionAddress,
         address _paymentToken,
         uint256 _initialCost,
         address _authorizedAddr
     ) public initializer {
-        require(_alturaAddress != address(0), "Invalid Altura address");
+        require(_collectionAddress != address(0), "Invalid Altura address");
         require(_authorizedAddr != address(0), "Invalid authorized address");
 
         __Ownable_init(msg.sender);
 
-        altura = _alturaAddress;
+        collectionAddress = _collectionAddress;
         paymentToken = _paymentToken;
         _baseCost = _initialCost;
         authorized = _authorizedAddr;
@@ -66,7 +68,7 @@ contract AlturaNFTLevelerV2 is Initializable, OwnableUpgradeable {
         uint256 tokenId,
         uint8 rarity
     ) public virtual onlyAuthorized {
-        require(IAlturaNFTV3(altura).balanceOf(user, tokenId) > 0, "Target does not own that NFT");
+        require(IAlturaNFTV3(collectionAddress).balanceOf(user, tokenId) > 0, "Target does not own that NFT");
         require(rarity >= 1 && rarity <= 3, "Invalid rarity");
 
         uint256 cost = _baseCost * (levelOf[tokenId] + 1) * uint256(rarity);

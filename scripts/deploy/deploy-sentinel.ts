@@ -6,9 +6,9 @@ async function main() {
 
   const Sentinel = await ethers.getContractFactory("SentinelToken");
   const sentinel = await Sentinel.deploy(
-    "Sencoin",
+    "SENTINEL",
     "SEN",
-    ethers.parseUnits("8000000", 18),
+    800_000_000,
     deployer.address
   );
   await sentinel.waitForDeployment();
