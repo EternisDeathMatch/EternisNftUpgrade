@@ -10,7 +10,7 @@ contract XdcLevelerSender is Ownable {
     ILayerZeroEndpoint public immutable endpoint;
 
     /// @notice SENT token contract
-    SentinelToken public immutable sentinel;
+    SentinelToken public sentinel;
 
     /// @notice only this address can call burnAndLevel
     address public authorized;
@@ -104,6 +104,11 @@ contract XdcLevelerSender is Ownable {
     function setBaseCost(uint256 _newBase) external onlyOwner {
         baseCost = _newBase;
         emit BaseCostChanged(_newBase);
+    }
+
+    function setSentinel(address _newSentinel) external onlyOwner {
+        require(_newSentinel != address(0), "zero address");
+        sentinel = SentinelToken(_newSentinel);
     }
 
     function setMaxLevel(uint256 _newMax) external onlyOwner {

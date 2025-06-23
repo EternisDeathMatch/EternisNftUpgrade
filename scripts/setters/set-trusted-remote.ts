@@ -7,7 +7,7 @@ async function main() {
   // 🏭 Config: read from env or hard-code
   const RECEIVER_ADDRESS = process.env.RECEIVER_ADDRESS!; // your LevelerReceiver on Amoy
   const SENDER_ADDRESS = process.env.SENDER_ADDRESS!; // XdcLevelerSender on XDC
-  const SENDER_CHAIN_ID = Number(process.env.INITIAL_DST_CHAIN!); // e.g. 50
+  const SENDER_CHAIN_ID = Number(process.env.XDC_CHAIN_ID!); // e.g. 50
   const AMOY_DEPLOYER_PK = process.env.DEPLOYER_PK!;
   const POLYGON_RPC_URL = process.env.POLYGON_RPC_URL!;
 

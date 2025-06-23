@@ -78,7 +78,7 @@ async function main() {
   // 4️⃣ Test parameters
   const AMOUNT = ethers.parseUnits("200", 18);
   const USER = await xdcSigner.getAddress();
-  const TOKEN_ID = 69;
+  const TOKEN_ID = 5;
   const RARITY = 2; // 1..3
   const CURRENT_LEVEL = 0; // must be < maxLevel
 

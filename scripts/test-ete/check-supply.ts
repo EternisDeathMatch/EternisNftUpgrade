@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 
 async function main() {
   // 1) Token contract address
-  const TOKEN_ADDRESS = process.env.SENTINEL_TOKEN_ADDRESS;
+  const TOKEN_ADDRESS = process.env.SENTINEL_TOKEN_ADDRESS!;
 
   // 2) Minimal ABI
   const ERC20_ABI = [
